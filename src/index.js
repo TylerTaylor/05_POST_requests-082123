@@ -39,7 +39,7 @@ fetch(baseUrl)
 fetch('http://localhost:3000/stores/3')
   .then(response => response.json())
   .then(store => {
-    console.log(store)
+    // console.log(store)
 
     renderHeader(store)
     renderFooter(store)
@@ -125,11 +125,13 @@ bookForm.addEventListener('submit', (e) => {
   e.preventDefault()
 
   // console.log(e.target.title)
-  console.log(e.target.author.value)
+  // console.log(e.target.author.value)
 
   // e.target is the form
   // e.target._____ is the input element (correlates to the name property on the input)
   // e.target._____.value is the actual user input
+
+  debugger;
 
   const newBook = {
     title: e.target.title.value,
@@ -140,10 +142,28 @@ bookForm.addEventListener('submit', (e) => {
     reviews: []
   }
 
-  renderBook(newBook)
+  console.log('newBook before post request: ', newBook)
+  // renderBook(newBook)
+  // debugger;
 
-  handleToggleForm()
-  e.target.reset()
+  // We need to persist (POST) our book to the server/backend
+  fetch('http://localhost:3000/books', {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(newBook)
+  })
+    .then(response => response.json())
+    .then(book => {
+      console.log('newBook after post request: ', book)
+      // debugger;
+      renderBook(book)
+    })
+
+  // handleToggleForm()
+  // e.target.reset()
 })
 
 
